@@ -20,10 +20,8 @@ GPIO.setwarnings(False)
 
 # Key = trigger name used by Alexa
 # Value = GPIO pin number / offset from 50000
-gpio_pins = {'Power 1':20,
-             'Power 2':21,
-             'Power 3':16,
-             'Power 4':12}
+gpio_pins = {'Outlet 1':20,
+             'Outlet 2':21}
 
 # Key = trigger name used by Alexa
 # Value = offset from 50030
@@ -72,7 +70,11 @@ if __name__ == "__main__":
     fauxmo.DEBUG = True
     p = fauxmo.poller()
     u = fauxmo.upnp_broadcast_responder()
-    u.init_socket()
+    for i in range(10):
+        if u.init_socket():
+            break
+        logging.info("Failed init_socket %d"%(i))
+        time.sleep(i)
     p.add(u)
 
     # Register the device callback as a fauxmo handler

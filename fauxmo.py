@@ -287,21 +287,22 @@ class upnp_broadcast_responder(object):
             try:
                 self.ssock.bind(('',self.port))
             except Exception, e:
-                dbg("WARNING: Failed to bind %s:%d: %s" , (self.ip,self.port,e))
+                dbg("WARNING: Failed to bind %s:%d: %s" % (self.ip,self.port,e))
                 ok = False
 
             try:
                 self.ssock.setsockopt(socket.IPPROTO_IP,socket.IP_ADD_MEMBERSHIP,self.mreq)
             except Exception, e:
-                dbg('WARNING: Failed to join multicast group:',e)
+                dbg('WARNING: Failed to join multicast group: %s'%(e))
                 ok = False
 
         except Exception, e:
-            dbg("Failed to initialize UPnP sockets:",e)
+            dbg("Failed to initialize UPnP sockets: %s"%(e))
             return False
         if ok:
             dbg("Listening for UPnP broadcasts")
-
+            return True
+        
     def fileno(self):
         return self.ssock.fileno()
 
